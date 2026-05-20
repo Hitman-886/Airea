@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Airea | Living Air Quality Site</title>
+    <meta
+      name="description"
+      content="Search a city, read live AQI and temperature, and explore how saplings and mature trees support cleaner air."
+    />
+    <link rel="preconnect" href="https://api.open-meteo.com" />
+    <link rel="preconnect" href="https://geocoding-api.open-meteo.com" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="living-background" aria-hidden="true">
+      <div class="sky-haze"></div>
+      <div class="moon-glow"></div>
+      <div class="tree-scene">
+        <div class="tree-trunk"></div>
+        <div class="branch branch-one"></div>
+        <div class="branch branch-two"></div>
+        <div class="branch branch-three"></div>
+        <div class="branch branch-four"></div>
+        <div class="branch branch-five"></div>
+        <div class="canopy canopy-back"></div>
+        <div class="canopy canopy-mid"></div>
+        <div class="canopy canopy-front"></div>
+      </div>
+      <div id="leaf-field" class="leaf-field"></div>
+    </div>
+
+    <main class="site-shell">
+      <nav class="site-nav reveal" aria-label="Primary navigation">
+        <a class="brand-mark" href="#top" aria-label="Airea home">Airea</a>
+        <div class="nav-links">
+          <a href="#planner">Planner</a>
+          <a href="#sapling">Sapling</a>
+          <a href="#readings">Readings</a>
+        </div>
+      </nav>
+
+      <section id="top" class="hero reveal" aria-label="Airea city search">
+        <div class="hero-topline" aria-label="Airea live overview">
+          <span>Canopy planning engine</span>
+          <span id="hero-location">Awaiting city</span>
+          <span id="hero-temp">Temp 0 C</span>
+        </div>
+
+        <div class="hero-copy">
+          <p class="eyebrow">Live air quality + tree growth planning</p>
+          <h1>Airea</h1>
+          <p>
+            A living site for reading a city's air, weather, and planting
+            potential, then turning those numbers into a calmer tree plan.
+          </p>
+        </div>
+
+        <div class="search-panel">
+          <label for="city-search">Search a place</label>
+          <div class="search-box">
+            <input
+              id="city-search"
+              type="search"
+              autocomplete="off"
+              placeholder="Delhi, London, Tokyo..."
+            />
+            <button id="search-button" type="button">Search</button>
+          </div>
+          <div id="location-results" class="results-list" role="listbox"></div>
+        </div>
+
+        <div class="hero-stats" aria-live="polite">
+          <article class="aqi-card stat-tile">
+            <span>Current US AQI</span>
+            <strong id="aqi-value">0</strong>
+            <p id="aqi-status">Choose a city to measure the air.</p>
+          </article>
+          <article class="stat-tile">
+            <span>Temperature</span>
+            <strong id="temperature-value">0 C</strong>
+            <p id="weather-summary">Weather updates after city lookup.</p>
+          </article>
+          <article class="stat-tile">
+            <span>Trees needed</span>
+            <strong id="trees-needed">0</strong>
+            <p id="tree-summary">Results update after an AQI lookup.</p>
+          </article>
+          <article class="stat-tile">
+            <span>PM2.5 now</span>
+            <strong id="pm25-value">0</strong>
+            <p>Fine particles drive many AQI alerts.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="story-band reveal" aria-label="Airea features">
+        <div>
+          <span class="eyebrow">What it does</span>
+          <h2>From live air to a planting idea.</h2>
+        </div>
+        <p>
+          Airea combines AQI, PM readings, temperature, local weather movement,
+          and tree benefit estimates into one smooth planning flow.
+        </p>
+        <div class="feature-row">
+          <span>Live city search</span>
+          <span>Temperature + wind</span>
+          <span>Sapling growth mode</span>
+          <span>Pollution profile</span>
+        </div>
+      </section>
+
+      <section id="sapling" class="sapling-section reveal" aria-label="Sapling growth">
+        <div class="section-copy">
+          <span class="eyebrow">Growth preview</span>
+          <h2>Choose the stage of the tree.</h2>
+          <p id="sapling-summary">
+            Mature canopy mode is selected for full annual air-benefit values.
+          </p>
+        </div>
+        <div class="sapling-stage" aria-label="Animated sapling preview">
+          <div class="soil-bed"></div>
+          <div class="sapling">
+            <span class="stem stem-main"></span>
+            <span class="stem stem-left"></span>
+            <span class="stem stem-right"></span>
+            <span class="leaf leaf-a"></span>
+            <span class="leaf leaf-b"></span>
+            <span class="leaf leaf-c"></span>
+            <span class="leaf leaf-d"></span>
+            <span class="new-shoot"></span>
+          </div>
+          <div class="growth-rings">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <label class="stage-control">
+          Planting stage
+          <select id="growth-stage">
+            <option value="sapling">Sapling start</option>
+            <option value="young">Young tree</option>
+            <option value="mature" selected>Mature canopy</option>
+          </select>
+        </label>
+      </section>
+
+      <section id="planner" class="planner-section reveal" aria-label="Tree planning controls">
+        <div class="section-copy">
+          <span class="eyebrow">Plan the canopy</span>
+          <h2 id="tree-name">Tree</h2>
+          <p id="tree-notes"></p>
+        </div>
+
+        <div class="planner-form">
+          <label>
+            Tree species
+            <select id="tree-select"></select>
+          </label>
+          <label>
+            Target US AQI
+            <input id="target-aqi" type="number" min="0" max="100" value="50" />
+          </label>
+          <label>
+            Area to improve (km2)
+            <input id="area-size" type="number" min="0.1" step="0.1" value="1" />
+          </label>
+          <label>
+            Air mixing height (m)
+            <input id="mixing-height" type="number" min="20" step="10" value="100" />
+          </label>
+        </div>
+
+        <dl class="tree-stats">
+          <div>
+            <dt>CO2 absorbed</dt>
+            <dd id="co2-absorbed">0</dd>
+          </div>
+          <div>
+            <dt>Oxygen produced</dt>
+            <dd id="oxygen-produced">0</dd>
+          </div>
+          <div>
+            <dt>PM2.5 removed</dt>
+            <dd id="pm25-removed">0</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section id="readings" class="readings-section reveal" aria-label="Air readings">
+        <div class="section-copy">
+          <span class="eyebrow">Current readings</span>
+          <h2 id="location-title">No location selected</h2>
+          <p id="estimate-note">
+            The tree estimate is a planning model. Real AQI improvement depends
+            on emissions, weather, street geometry, tree health, canopy size,
+            and maintenance.
+          </p>
+        </div>
+
+        <div class="pollutant-list">
+          <div><span>PM10</span><strong id="pm10-value">0</strong></div>
+          <div><span>NO2</span><strong id="no2-value">0</strong></div>
+          <div><span>O3</span><strong id="ozone-value">0</strong></div>
+          <div><span>CO</span><strong id="co-value">0</strong></div>
+        </div>
+
+        <div class="bar-chart" aria-label="Pollutant comparison chart">
+          <div class="bar-row">
+            <span>PM2.5</span>
+            <div class="bar-track"><i id="bar-pm25"></i></div>
+            <strong id="chart-pm25">0</strong>
+          </div>
+          <div class="bar-row">
+            <span>PM10</span>
+            <div class="bar-track"><i id="bar-pm10"></i></div>
+            <strong id="chart-pm10">0</strong>
+          </div>
+          <div class="bar-row">
+            <span>NO2</span>
+            <div class="bar-track"><i id="bar-no2"></i></div>
+            <strong id="chart-no2">0</strong>
+          </div>
+          <div class="bar-row">
+            <span>O3</span>
+            <div class="bar-track"><i id="bar-ozone"></i></div>
+            <strong id="chart-ozone">0</strong>
+          </div>
+          <div class="bar-row">
+            <span>CO</span>
+            <div class="bar-track"><i id="bar-co"></i></div>
+            <strong id="chart-co">0</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="sources" aria-label="Data sources">
+        <p>
+          Live place search, AQI, and weather data use
+          <a href="https://open-meteo.com/en/docs/geocoding-api">Open-Meteo Geocoding</a>,
+          <a href="https://open-meteo.com/en/docs/air-quality-api">Air Quality</a>,
+          and Open-Meteo Forecast APIs. Tree benefit values are planning
+          estimates inspired by urban-forest accounting references.
+        </p>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
