@@ -1,0 +1,916 @@
+:root {
+  color-scheme: light;
+  --canopy: #2f7d4f;
+  --canopy-deep: #16472f;
+  --sprout: #b8db76;
+  --sun: #f1cf72;
+  --bark: #5f3b27;
+  --soil: #2b221b;
+  --mist: #f5f8ef;
+  --panel: rgba(255, 255, 255, 0.76);
+  --panel-strong: rgba(255, 255, 255, 0.9);
+  --ink: #17211b;
+  --muted: #617165;
+  --line: rgba(32, 65, 42, 0.16);
+  --shadow: 0 24px 70px rgba(21, 45, 30, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 50% 16%, rgba(249, 235, 167, 0.64), transparent 30rem),
+    linear-gradient(180deg, #d7edf0 0%, #eef5df 54%, #c8d9a7 100%);
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: auto 0 0;
+  height: 32vh;
+  z-index: -3;
+  background:
+    linear-gradient(180deg, transparent, rgba(62, 101, 47, 0.42)),
+    repeating-linear-gradient(92deg, rgba(31, 77, 39, 0.12) 0 2px, transparent 2px 20px);
+  pointer-events: none;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+a {
+  color: #256b46;
+  font-weight: 800;
+}
+
+.living-background {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 20% 24%, rgba(255, 255, 255, 0.42), transparent 24rem),
+    radial-gradient(ellipse at 78% 14%, rgba(255, 239, 173, 0.36), transparent 22rem);
+}
+
+.living-background::before,
+.living-background::after {
+  content: "";
+  position: absolute;
+  inset: -10%;
+  opacity: 0.18;
+  background-image:
+    linear-gradient(112deg, transparent 0 48%, rgba(39, 80, 45, 0.36) 49% 50%, transparent 51%),
+    linear-gradient(76deg, transparent 0 51%, rgba(39, 80, 45, 0.26) 52% 53%, transparent 54%);
+  background-size: 240px 190px, 290px 230px;
+  animation: backgroundDrift 34s linear infinite;
+}
+
+.living-background::after {
+  opacity: 0.12;
+  animation-duration: 48s;
+  animation-direction: reverse;
+}
+
+.sunwash {
+  position: absolute;
+  inset: -22vh -14vw auto auto;
+  width: 58vw;
+  height: 58vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 245, 179, 0.62), rgba(255, 245, 179, 0.12) 44%, transparent 68%);
+  animation: sunPulse 8s ease-in-out infinite;
+}
+
+.tree-scene {
+  position: absolute;
+  left: 50%;
+  bottom: -14vh;
+  width: min(980px, 120vw);
+  height: min(1080px, 124vh);
+  transform: translateX(-50%);
+  transform-origin: 50% 100%;
+  animation: treeBreath 8s ease-in-out infinite;
+}
+
+.tree-trunk {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: clamp(96px, 12vw, 160px);
+  height: 72%;
+  transform: translateX(-50%);
+  border-radius: 46% 54% 16px 16px;
+  clip-path: polygon(34% 0, 66% 0, 83% 100%, 17% 100%);
+  background:
+    linear-gradient(88deg, rgba(21, 13, 9, 0.54), transparent 22% 62%, rgba(255, 230, 176, 0.16)),
+    repeating-linear-gradient(94deg, rgba(255, 227, 173, 0.06) 0 6px, transparent 6px 18px),
+    linear-gradient(90deg, #342116, #75513b 45%, #42291d);
+  box-shadow: inset 20px 0 30px rgba(29, 17, 11, 0.46), inset -16px 0 24px rgba(241, 196, 139, 0.12);
+}
+
+.tree-trunk::before,
+.tree-trunk::after {
+  content: "";
+  position: absolute;
+  inset: 8% 54% 0 18%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 231, 176, 0.2), transparent 74%);
+  transform: rotate(4deg);
+}
+
+.tree-trunk::after {
+  inset: 16% 18% 12% 62%;
+  background: linear-gradient(180deg, rgba(26, 15, 10, 0.34), transparent 78%);
+}
+
+.branch {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  height: clamp(18px, 2.8vw, 34px);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #7a5238, #352016);
+  transform-origin: 0 50%;
+  box-shadow: inset 0 8px 12px rgba(255, 216, 163, 0.12);
+}
+
+.branch-one {
+  width: 38%;
+  transform: rotate(-31deg);
+}
+
+.branch-two {
+  width: 36%;
+  bottom: 58%;
+  transform: rotate(23deg);
+}
+
+.branch-three {
+  width: 28%;
+  bottom: 66%;
+  transform: rotate(-15deg);
+}
+
+.branch-four {
+  width: 30%;
+  bottom: 69%;
+  transform: rotate(34deg);
+}
+
+.canopy {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 22px 46px rgba(22, 73, 36, 0.24));
+}
+
+.canopy-back {
+  top: 0;
+  width: 106%;
+  height: 58%;
+  border-radius: 42% 58% 48% 52% / 34% 36% 64% 66%;
+  clip-path: polygon(6% 64%, 13% 41%, 23% 30%, 30% 12%, 45% 6%, 58% 15%, 70% 7%, 84% 24%, 92% 45%, 98% 66%, 89% 86%, 70% 92%, 52% 84%, 33% 95%, 14% 84%);
+  background:
+    linear-gradient(138deg, rgba(191, 226, 123, 0.52), transparent 32%),
+    repeating-conic-gradient(from 18deg, rgba(32, 91, 45, 0.92) 0 12deg, rgba(64, 126, 58, 0.86) 12deg 27deg, rgba(39, 107, 56, 0.9) 27deg 44deg),
+    linear-gradient(180deg, rgba(87, 145, 65, 0.95), rgba(24, 84, 43, 0.95));
+  opacity: 0.82;
+  animation: canopySway 7s ease-in-out infinite;
+}
+
+.canopy-front {
+  top: 8%;
+  width: 88%;
+  height: 52%;
+  border-radius: 48% 52% 44% 56% / 30% 34% 66% 70%;
+  clip-path: polygon(4% 62%, 12% 36%, 28% 25%, 37% 8%, 52% 15%, 64% 4%, 78% 20%, 93% 39%, 96% 67%, 84% 84%, 66% 78%, 52% 92%, 36% 80%, 18% 88%);
+  background:
+    linear-gradient(115deg, rgba(225, 244, 154, 0.46), transparent 30%),
+    repeating-linear-gradient(28deg, rgba(161, 198, 91, 0.35) 0 10px, transparent 10px 24px),
+    repeating-conic-gradient(from -12deg, rgba(75, 139, 69, 0.94) 0 16deg, rgba(44, 120, 75, 0.9) 16deg 31deg, rgba(128, 173, 82, 0.86) 31deg 43deg);
+  opacity: 0.78;
+  animation: canopySway 8.5s ease-in-out infinite reverse;
+}
+
+.canopy::before,
+.canopy::after {
+  content: "";
+  position: absolute;
+  inset: 12% 10%;
+  clip-path: polygon(8% 40%, 20% 20%, 33% 38%, 44% 18%, 58% 38%, 72% 21%, 89% 43%, 74% 54%, 88% 72%, 64% 66%, 52% 83%, 40% 65%, 18% 75%, 28% 55%);
+  background: rgba(221, 239, 151, 0.16);
+}
+
+.canopy::after {
+  inset: 26% 14% 18%;
+  transform: rotate(180deg);
+  background: rgba(19, 73, 38, 0.18);
+}
+
+.leaf-field {
+  position: absolute;
+  inset: 0;
+}
+
+.leaf-fragment {
+  position: absolute;
+  left: var(--x);
+  top: -10vh;
+  width: var(--size);
+  height: calc(var(--size) * 0.55);
+  border-radius: 100% 0 100% 0;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.3), transparent 36%),
+    linear-gradient(135deg, var(--leaf-light), var(--leaf-dark));
+  opacity: var(--opacity);
+  transform: rotate(var(--rotate));
+  animation:
+    leafFall var(--duration) linear var(--delay) infinite,
+    leafFlutter calc(var(--duration) / 3) ease-in-out var(--delay) infinite;
+}
+
+.leaf-fragment::after {
+  content: "";
+  position: absolute;
+  inset: 47% 10% auto 12%;
+  height: 1px;
+  background: rgba(31, 83, 44, 0.34);
+  transform: rotate(-18deg);
+}
+
+.shell {
+  width: min(1240px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 34px 0 52px;
+  position: relative;
+  z-index: 1;
+}
+
+.experience {
+  min-height: min(760px, calc(100vh - 68px));
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(320px, 0.74fr);
+  gap: 22px;
+  align-items: stretch;
+}
+
+.intro-panel,
+.status-rail,
+.control-deck,
+.tree-card,
+.pollutants,
+.sources {
+  border: 1px solid rgba(255, 255, 255, 0.54);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(20px) saturate(1.12);
+}
+
+.intro-panel {
+  min-height: 620px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(26px, 5vw, 60px);
+  overflow: hidden;
+  background:
+    linear-gradient(140deg, rgba(20, 41, 27, 0.83), rgba(37, 94, 58, 0.46) 54%, rgba(255, 255, 255, 0.08)),
+    rgba(255, 255, 255, 0.08);
+  color: #fff;
+  position: relative;
+}
+
+.intro-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(100deg, rgba(255, 255, 255, 0.1), transparent 34%),
+    radial-gradient(circle at 76% 18%, rgba(190, 222, 119, 0.32), transparent 16rem);
+  animation: panelGlow 7s ease-in-out infinite;
+}
+
+.intro-panel > * {
+  position: relative;
+}
+
+.eyebrow,
+.card-label {
+  margin: 0 0 10px;
+  color: var(--canopy);
+  font-size: 0.76rem;
+  font-weight: 850;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.intro-panel .eyebrow {
+  color: #ddf4a6;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 14px;
+  font-size: clamp(4rem, 10vw, 8.7rem);
+  line-height: 0.86;
+  letter-spacing: 0;
+}
+
+h2 {
+  margin-bottom: 8px;
+  font-size: 1.35rem;
+  letter-spacing: 0;
+}
+
+.hero__copy {
+  max-width: 690px;
+  margin-bottom: 34px;
+  font-size: 1.14rem;
+  line-height: 1.75;
+}
+
+.search-panel {
+  width: min(760px, 100%);
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  transition: transform 240ms ease, background 240ms ease, border-color 240ms ease;
+}
+
+.search-panel:focus-within {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.24);
+  border-color: rgba(221, 244, 166, 0.72);
+}
+
+label {
+  display: grid;
+  gap: 8px;
+  color: var(--ink);
+  font-size: 0.92rem;
+  font-weight: 850;
+}
+
+.intro-panel label {
+  color: #f4ffe9;
+}
+
+.search-box {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+}
+
+input,
+select {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid rgba(32, 65, 42, 0.16);
+  border-radius: 8px;
+  padding: 0 14px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.94);
+  outline: none;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--canopy);
+  box-shadow: 0 0 0 4px rgba(47, 125, 79, 0.16);
+  transform: translateY(-1px);
+}
+
+button {
+  min-height: 48px;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 22px;
+  color: #fff;
+  background: linear-gradient(135deg, #2f8a59, #246c47);
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(31, 97, 59, 0.24);
+  filter: brightness(1.04);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.results-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.result-button {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.52);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.9);
+  text-align: left;
+  font-weight: 800;
+  animation: listIn 220ms ease both;
+}
+
+.result-button span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 650;
+}
+
+.status-rail {
+  display: grid;
+  grid-template-rows: 1.18fr 1fr 0.86fr;
+  gap: 14px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.metric-card {
+  min-height: 176px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(247, 252, 236, 0.7)),
+    rgba(255, 255, 255, 0.7);
+  transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+  position: relative;
+}
+
+.metric-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(circle at 22% 22%, rgba(184, 219, 118, 0.35), transparent 12rem);
+  transition: opacity 240ms ease;
+}
+
+.metric-card:hover,
+.tree-card:hover,
+.pollutants:hover,
+.control-deck:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 26px 70px rgba(21, 45, 30, 0.2);
+  border-color: rgba(47, 125, 79, 0.24);
+}
+
+.metric-card:hover::before {
+  opacity: 1;
+}
+
+.metric-card > * {
+  position: relative;
+}
+
+.metric-card strong {
+  display: block;
+  margin-bottom: 10px;
+  font-size: clamp(2.8rem, 6vw, 5.2rem);
+  line-height: 0.92;
+  color: var(--soil);
+  transition: transform 260ms ease, color 260ms ease;
+}
+
+.metric-card.compact strong {
+  font-size: clamp(2rem, 4vw, 3.1rem);
+}
+
+.metric-card p,
+.tree-card p,
+.pollutants p,
+.sources p {
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.aqi-card.good strong {
+  color: #28764b;
+}
+
+.aqi-card.moderate strong {
+  color: #9a761a;
+}
+
+.aqi-card.unhealthy-sensitive strong {
+  color: #b05e28;
+}
+
+.aqi-card.unhealthy strong,
+.aqi-card.very-unhealthy strong,
+.aqi-card.hazardous strong {
+  color: #a63b35;
+}
+
+.planner-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(380px, 1.18fr);
+  grid-template-areas:
+    "controls tree"
+    "pollutants tree";
+  gap: 22px;
+  margin-top: 22px;
+}
+
+.control-deck,
+.tree-card,
+.pollutants {
+  background: var(--panel);
+  transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+}
+
+.control-deck {
+  grid-area: controls;
+  padding: 24px;
+}
+
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.tree-card {
+  grid-area: tree;
+  min-height: 570px;
+  display: grid;
+  grid-template-columns: minmax(220px, 0.88fr) 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 24px;
+  align-items: start;
+  padding: 24px;
+}
+
+.tree-card img {
+  grid-row: span 2;
+  width: 100%;
+  height: 100%;
+  min-height: 470px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #e4f0db;
+  box-shadow: inset 0 0 0 1px var(--line);
+  transition: transform 520ms ease, filter 520ms ease;
+}
+
+.tree-card:hover img {
+  transform: scale(1.025);
+  filter: saturate(1.08) contrast(1.02);
+}
+
+.tree-stats {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin: 0;
+}
+
+.tree-stats div,
+.pollutant-grid div {
+  min-height: 92px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.68);
+  transition: transform 190ms ease, background 190ms ease;
+}
+
+.tree-stats div:hover,
+.pollutant-grid div:hover {
+  transform: translateX(4px);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+dt,
+.pollutant-grid span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+dd,
+.pollutant-grid strong {
+  display: block;
+  margin: 8px 0 0;
+  font-size: 1.3rem;
+  color: var(--soil);
+}
+
+.pollutants {
+  grid-area: pollutants;
+  padding: 24px;
+}
+
+.pollutant-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.note {
+  margin: 18px 0 0;
+  padding: 14px 16px;
+  border-left: 4px solid var(--sun);
+  border-radius: 0 8px 8px 0;
+  background: rgba(255, 248, 229, 0.8);
+}
+
+.sources {
+  margin-top: 22px;
+  padding: 18px 22px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.sources p {
+  margin-bottom: 0;
+  font-size: 0.92rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px) scale(0.985);
+  animation: revealUp 700ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.reveal:nth-child(2) {
+  animation-delay: 120ms;
+}
+
+.planner-grid .reveal:nth-child(1) {
+  animation-delay: 220ms;
+}
+
+.planner-grid .reveal:nth-child(2) {
+  animation-delay: 320ms;
+}
+
+.planner-grid .reveal:nth-child(3) {
+  animation-delay: 420ms;
+}
+
+.is-loading .metric-card strong {
+  animation: pulseValue 850ms ease-in-out infinite;
+}
+
+.has-data .metric-card strong,
+.has-data .pollutant-grid strong,
+.has-data .tree-stats dd {
+  animation: valuePop 420ms ease both;
+}
+
+@keyframes revealUp {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes treeBreath {
+  0%,
+  100% {
+    transform: translateX(-50%) rotate(-0.35deg) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) rotate(0.35deg) scale(1.012);
+  }
+}
+
+@keyframes canopySway {
+  0%,
+  100% {
+    transform: translateX(-50%) rotate(-0.8deg);
+  }
+  50% {
+    transform: translateX(-50%) rotate(1deg) translateY(8px);
+  }
+}
+
+@keyframes leafFall {
+  0% {
+    translate: 0 -12vh;
+  }
+  100% {
+    translate: var(--drift) 120vh;
+  }
+}
+
+@keyframes leafFlutter {
+  0%,
+  100% {
+    rotate: var(--rotate);
+  }
+  50% {
+    rotate: calc(var(--rotate) + 95deg);
+  }
+}
+
+@keyframes backgroundDrift {
+  from {
+    background-position: 0 0, 0 0;
+  }
+  to {
+    background-position: 240px 190px, -290px 230px;
+  }
+}
+
+@keyframes sunPulse {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes panelGlow {
+  0%,
+  100% {
+    opacity: 0.76;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes listIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseValue {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+}
+
+@keyframes valuePop {
+  0% {
+    transform: translateY(8px) scale(0.96);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 980px) {
+  .shell {
+    width: min(100% - 22px, 720px);
+    padding-top: 14px;
+  }
+
+  .experience,
+  .planner-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas: none;
+  }
+
+  .intro-panel,
+  .status-rail,
+  .control-deck,
+  .tree-card,
+  .pollutants {
+    grid-area: auto;
+  }
+
+  .intro-panel {
+    min-height: 560px;
+  }
+
+  .status-rail {
+    grid-template-rows: none;
+    grid-template-columns: 1fr;
+  }
+
+  .tree-card {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .tree-card img {
+    grid-row: auto;
+    min-height: 330px;
+    max-height: 440px;
+  }
+
+  .tree-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .tree-scene {
+    width: 136vw;
+    height: 98vh;
+    opacity: 0.82;
+  }
+}
+
+@media (max-width: 620px) {
+  .search-box,
+  .controls-grid,
+  .tree-stats,
+  .pollutant-grid {
+    grid-template-columns: 1fr;
+  }
+
+  h1 {
+    font-size: clamp(4rem, 21vw, 6rem);
+  }
+
+  .intro-panel {
+    padding: 26px 22px;
+  }
+
+  .search-panel {
+    padding: 16px;
+  }
+
+  .intro-panel label {
+    font-size: 0.86rem;
+    gap: 12px;
+  }
+
+  input,
+  select,
+  button {
+    min-height: 46px;
+  }
+
+  .hero__copy {
+    font-size: 1rem;
+  }
+
+  .metric-card {
+    min-height: 152px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
